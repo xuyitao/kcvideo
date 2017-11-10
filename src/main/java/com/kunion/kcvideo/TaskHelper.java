@@ -34,9 +34,11 @@ public class TaskHelper {
 			}
 			LogUtil.log(mBean.getInFileName() + "   starting");
 			try {
-				// first list out all the video files 
-				
-				// pick one video file to process - if file is still writing then do next 
+				// hold
+				if(!FileUtil.isCompletelyFile(mBean.getInFilePath())) {
+					LogUtil.log(mBean.getInFileName()+" file isnot complete time out");
+					return ;
+				}
 				
 				// calculate video file's length
 				Integer videoLength = ProcessHander.getVideoLength(mBean.getInFilePath());
@@ -85,7 +87,7 @@ public class TaskHelper {
 					LogUtil.log(mBean.getInFileName() + "  finish");
 					FileUtil.pruneDir(mBean.getTmpDir());
 				}
-				
+				App.videoManager.finishVideo(mBean);
 				FileUtil.deleteDir(mBean.getTmpDir());
 
 			} catch (Exception e) {

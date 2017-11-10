@@ -60,7 +60,7 @@ public class ProcessAction {
 		LogUtil.log(cmd);
 		Process pr = rt.exec(cmd);
 		
-		String result = readerResult(pr.getInputStream());
+		String result = readerResult(pr.getErrorStream());
 		pr.destroy();
 	    return Boolean.TRUE;
 	
@@ -79,8 +79,7 @@ public class ProcessAction {
 		LogUtil.log(cmd);
 		Process pr = rt.exec(cmd);
 
-		String result = readerResult(pr.getInputStream());
-		
+		String result = readerResult(pr.getErrorStream());
 		pr.destroy();
 	    return Boolean.TRUE;
 	
@@ -101,7 +100,7 @@ public class ProcessAction {
 		LogUtil.log(cmd);
 		Process pr = rt.exec(cmd);
 
-		String result = readerResult(pr.getInputStream());
+		String result = readerResult(pr.getErrorStream());
 		
 		pr.destroy();
 	    return Boolean.TRUE;
@@ -120,5 +119,5 @@ public class ProcessAction {
 		input.close();
 		return sbBuilder.toString();
 	}
-
+	
 }

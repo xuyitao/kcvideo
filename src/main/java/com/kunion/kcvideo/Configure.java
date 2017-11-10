@@ -13,9 +13,6 @@ public class Configure {
 	public static String ffprobe = "/usr/local/bin/ffprobe";
 	public static String ffmpeg = "/usr/local/bin/ffmpeg";
 	
-	
-//	public static String ffprobe = bootFolderPath + "/tools/ffprobe";
-//	public static String ffmpeg = bootFolderPath + "/tools/ffmpeg";
 	public static String videoFolderPath = bootFolderPath + "/videos";
 	public static String imageFolderPath = bootFolderPath + "/images";
 	public static String tmpFolderPath = bootFolderPath + "/tmp";
@@ -24,7 +21,12 @@ public class Configure {
 	public static String tmpImageFormat = "img%03d.jpg";
 	public static int oneImageSecond = 5;
 	
-	
+	static {
+		if(Configure.isWin()) {
+			ffprobe = bootFolderPath + "/tools/ffprobe";
+			ffmpeg = bootFolderPath + "/tools/ffmpeg";
+		}
+	}
 	public static String getVideoFullPath(String fileName) {
 		return videoFolderPath + "/" + fileName;
 	}
@@ -86,5 +88,14 @@ public class Configure {
 			workTime = 1;
 		
 		return workTime;
+	}
+	
+	public static boolean isWin() {
+		String os = System.getProperty("os.name");  
+		if(os.toLowerCase().startsWith("win")){  
+		  return true;
+		} else {
+			return false;
+		}
 	}
 }

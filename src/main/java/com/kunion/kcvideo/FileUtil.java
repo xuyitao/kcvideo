@@ -100,10 +100,28 @@ public class FileUtil {
         return ext;
     }
     
-	public boolean isCompletelyWritten(File file) {
+    
+    public static boolean isCompletelyFile(String filepath) {
+    	int waitSecond = 10;
+    	int i = 0;
+    	
+    	while(!FileUtil.isCompletelyWritten(filepath)){
+    		i++;
+    		if(i>=waitSecond) {
+    			return false;
+    		}
+    	}
+    	return true;
+    }
+    public static boolean isCompletelyWritten(String filepath) {
+    	
+    	return isCompletelyWritten(new File(filepath));
+    }
+    
+	public static boolean isCompletelyWritten(File file) {
 	    Long fileSizeBefore = file.length();
 	    try {
-			TimeUnit.SECONDS.sleep(2);
+			TimeUnit.SECONDS.sleep(1);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -112,7 +130,7 @@ public class FileUtil {
 	    
 	    Long fileSizeAfter = file.length();
 
-	    System.out.println("comparing file size " + fileSizeBefore + " with " + fileSizeAfter);
+	    LogUtil.log("comparing file size " + fileSizeBefore + " with " + fileSizeAfter);
 
 	    if (fileSizeBefore.equals(fileSizeAfter)) {
 	        return true;

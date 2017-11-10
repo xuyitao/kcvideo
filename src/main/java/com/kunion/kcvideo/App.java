@@ -1,6 +1,7 @@
 package com.kunion.kcvideo;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Hello world!
@@ -8,12 +9,31 @@ import java.io.File;
  */
 public class App 
 {
+	public static VideoManager videoManager = new VideoManager();
+	
     public static void main( String[] args )
     {
     	TaskHelper helper = new TaskHelper();
     	
-    	TaskBean bean = new TaskBean("v2.mp4");
-    	
-    	helper.addTask(bean);
+    	while(true) {
+    		
+    		List<String> newVideos = videoManager.getUnHandlerVideo();
+    		
+    		LogUtil.log(newVideos.toString());
+    		
+    		for(String videoFileName : newVideos) {
+    			
+    	    	TaskBean bean = new TaskBean(videoFileName);
+    	    	helper.addTask(bean);
+    	    	videoManager.handlerVideo(bean);
+    		}
+	    	
+    		try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     }
 }
