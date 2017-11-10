@@ -25,7 +25,6 @@ public class TaskHelper {
 			mBean = bean;
 		}
 		
-		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			if(mBean == null) {

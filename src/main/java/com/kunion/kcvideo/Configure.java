@@ -9,12 +9,12 @@ public class Configure {
 
 	public static String bootFolderPath = ".";
 	
-//	private static String ffprobe = "/usr/local/bin/ffprobe";
-//	private static String ffmpeg = "/usr/local/bin/ffmpeg";
+	public static String ffprobe = "/usr/local/bin/ffprobe";
+	public static String ffmpeg = "/usr/local/bin/ffmpeg";
 	
 	
-	public static String ffprobe = bootFolderPath + "/tools/ffprobe";
-	public static String ffmpeg = bootFolderPath + "/tools/ffmpeg";
+//	public static String ffprobe = bootFolderPath + "/tools/ffprobe";
+//	public static String ffmpeg = bootFolderPath + "/tools/ffmpeg";
 	public static String videoFolderPath = bootFolderPath + "/videos";
 	public static String imageFolderPath = bootFolderPath + "/images";
 	public static String tmpFolderPath = bootFolderPath + "/tmp";

@@ -73,7 +73,7 @@ public class ProcessAction {
 		sBuilder.append(Configure.ffmpeg);
 		sBuilder.append(" -f image2 -r 1/"+Configure.oneImageSecond+" -i ");
 		sBuilder.append(imgPath);
-		sBuilder.append(" -c:v libx264 -vf \"fps=25,format=yuv420p\" -y ");
+		sBuilder.append(" -y ");
 		sBuilder.append(videoPath);
 		String cmd = sBuilder.toString();
 		LogUtil.log(cmd);
@@ -95,7 +95,7 @@ public class ProcessAction {
 		sBuilder.append(videoPath);
 		sBuilder.append(" -i ");
 		sBuilder.append(audioPath);
-		sBuilder.append(" -c copy -y ");
+		sBuilder.append(" -c:v copy -c:a aac -strict experimental -y ");
 		sBuilder.append(outVideoPath);
 		String cmd = sBuilder.toString();
 		LogUtil.log(cmd);

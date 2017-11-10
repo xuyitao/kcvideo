@@ -18,7 +18,6 @@ public class ProcessHander {
 		
 		Future<Integer> future = getVideoInfoPool.submit(new Callable<Integer>() {
 
-            @Override
             public Integer call() throws Exception {
                 return ProcessAction.getVideoLength(videoPath);
             }
@@ -34,7 +33,6 @@ public class ProcessHander {
 	public static boolean generateAudio(final String videoPath, final String audioPath) throws InterruptedException, ExecutionException {
 		Future<Boolean> future = getVideoInfoPool.submit(new Callable<Boolean>() {
 
-            @Override
             public Boolean call() throws Exception {
                 return ProcessAction.generateAudio(videoPath, audioPath);
             }
@@ -55,7 +53,6 @@ public class ProcessHander {
 	public static boolean generateVideoFormImage(final String imgPath, final String videoPath) throws InterruptedException, ExecutionException {
 		Future<Boolean> future = generateVideoFormImagePool.submit(new Callable<Boolean>() {
 
-            @Override
             public Boolean call() throws Exception {
                 return ProcessAction.generateVideoFormImage(imgPath, videoPath);
             }
@@ -77,7 +74,6 @@ public class ProcessHander {
 	public static boolean mergeVideoAImage(final String audioPath, final String videoPath, final String outVideoPath) throws InterruptedException, ExecutionException {
 		Future<Boolean> future = mergeVideoAImagePool.submit(new Callable<Boolean>() {
 
-            @Override
             public Boolean call() throws Exception {
                 return ProcessAction.mergeVideoAImage(audioPath, videoPath, outVideoPath);
             }
