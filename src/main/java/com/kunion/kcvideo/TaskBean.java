@@ -14,6 +14,8 @@ public class TaskBean {
 	
 	private String tmpDir;
 	
+	private String outputDir;
+	
 	//acc
 	private String tmpAudioPath;
 	
@@ -34,6 +36,12 @@ public class TaskBean {
     	File tmpDirFile = new File(tmpDir);
     	tmpDirFile.mkdirs();
     	
+    	this.outputDir = Configure.getOutputFullPath(inFileName);
+    	File outputDirFile = new File(outputDir);
+    	outputDirFile.mkdirs();
+    	
+    	
+    	
     	this.tmpAudioPath = this.tmpDir+"/"+inFileName.substring(0, separatorIndex)+".aac";
     	this.tmpVideoPath = this.tmpDir+"/"+this.outFileName;
     	
@@ -48,6 +56,12 @@ public class TaskBean {
 		this.inFileName = inFileName;
 		
     
+	}
+	
+	public String getWorkingOutFileName(int workingIdx) {
+		int separatorIndex = inFileName.lastIndexOf(".");
+		String workingOutFileName = this.outputDir + "/" + inFileName.substring(0, separatorIndex) + ".out_" + workingIdx + '_' +inFileName.substring(separatorIndex);
+		return workingOutFileName;
 	}
 
 	public String getOutFileName() {

@@ -73,7 +73,7 @@ public class ProcessAction {
 		sBuilder.append(Configure.ffmpeg);
 		sBuilder.append(" -f image2 -r 1/"+Configure.oneImageSecond+" -i ");
 		sBuilder.append(imgPath);
-		sBuilder.append(" -y ");
+		sBuilder.append(" -pix_fmt yuvj420p -y ");
 		sBuilder.append(videoPath);
 		String cmd = sBuilder.toString();
 		LogUtil.log(cmd);

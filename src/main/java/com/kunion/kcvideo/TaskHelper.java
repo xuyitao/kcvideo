@@ -53,28 +53,40 @@ public class TaskHelper {
 				// pick random x files for extend to length of video
 				//一张图片5秒  时长/5+1 = 需要的图片数量
 				int needNum = Float.valueOf(videoLength / Configure.oneImageSecond + 1).intValue();
-				FileUtil.makeExportImage(needNum, mBean.getTmpDir());
 				
-				// generate video fo x files, 
-				isSus = ProcessHander.generateVideoFormImage(mBean.getTmpImageFormat(), mBean.getTmpVideoPath());
-				if(!isSus) {
-					LogUtil.log(mBean.getInFileName()+" generateVideoFormImage fail");
-					return ;
+				// 根据现有图片的数量，计算出需要生成几个视频
+				
+				int workTime = Configure.calculateGenerationTime(needNum);
+				
+				LogUtil.log("Supposed to generate " + workTime +" videos  ");
+				
+				for (int workIdx = 0; workIdx< workTime; workIdx++){
+					
+					LogUtil.log("Generating  " + workIdx  + " video  ");
+					
+					// 生成新一轮的图片
+					FileUtil.makeExportImage(needNum, mBean.getTmpDir());
+					
+					// generate video fo x files, 
+					isSus = ProcessHander.generateVideoFormImage(mBean.getTmpImageFormat(), mBean.getTmpVideoPath());
+					if(!isSus) {
+						LogUtil.log(mBean.getInFileName()+" generateVideoFormImage fail");
+						return ;
+					}
+					
+					// combine video and audio file output final video
+					isSus = ProcessHander.mergeVideoAImage(mBean.getTmpAudioPath(), mBean.getTmpVideoPath(), mBean.getWorkingOutFileName(workIdx+1));
+					if(!isSus) {
+						LogUtil.log(mBean.getInFileName()+" mergeVideoAImage fail");
+						return;
+					}
+					
+					FileUtil.deleteDir(mBean.getTmpDir());
+					// go sleep one second
+					
+					LogUtil.log(mBean.getInFileName() + "  finish");
 				}
-				
-				
-				// combine video and audio file output final video
-				isSus = ProcessHander.mergeVideoAImage(mBean.getTmpAudioPath(), mBean.getTmpVideoPath(), mBean.getOutFilePath());
-				if(!isSus) {
-					LogUtil.log(mBean.getInFileName()+" mergeVideoAImage fail");
-					return ;
-				}
-				
-				
-				FileUtil.deleteDir(mBean.getTmpDir());
-				// go sleep one second
-				
-				LogUtil.log(mBean.getInFileName() + "  finish");
+
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();

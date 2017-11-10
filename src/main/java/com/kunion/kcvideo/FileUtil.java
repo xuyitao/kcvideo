@@ -12,9 +12,8 @@ public class FileUtil {
 
 	
 	public static void makeExportImage(int needNum, String filePath) throws Exception {
-		List<String> imagePaths = Configure.generateImages();
+		List<String> imagePaths = Configure.generateImages(needNum);
 		//筛选出几张需要的图片
-		
 		
 		//蒋筛选出的图片拷贝到临时目录下
 		for(int i=0; i<imagePaths.size();i++) {
@@ -23,7 +22,6 @@ public class FileUtil {
 			copyChannel(new File(imagePaths.get(i)), new File(filePath, dstFileName));
 			
 		}
-		
 	}
 	
 	public static void copyChannel(File f1,File f2) throws Exception{
@@ -68,5 +66,17 @@ public class FileUtil {
         }
         // 目录此时为空，可以删除
         return dir.delete();
+    }
+    
+    
+    public static String getExtension(File f) {
+        String ext = null;
+        String s = f.getName();
+        int i = s.lastIndexOf('.');
+
+        if (i > 0 &&  i < s.length() - 1) {
+            ext = s.substring(i+1).toLowerCase();
+        }
+        return ext;
     }
 }
