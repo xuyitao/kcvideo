@@ -12,7 +12,7 @@ public class App
     {
     	TaskHelper helper = new TaskHelper();
     	
-    	TaskBean bean = new TaskBean("v1.mp4");
+    	TaskBean bean = new TaskBean("v2.mp4");
     	
     	helper.addTask(bean);
     }

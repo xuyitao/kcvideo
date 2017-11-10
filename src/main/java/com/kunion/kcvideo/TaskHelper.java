@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class TaskHelper {
 
@@ -41,15 +42,6 @@ public class TaskHelper {
 				Integer videoLength = ProcessHander.getVideoLength(mBean.getInFilePath());
 				LogUtil.log(mBean.getInFileName()+" videoLength is  "+videoLength);
 				
-				// generate video's audio file
-				Boolean isSus = ProcessHander.generateAudio(mBean.getInFilePath(), mBean.getTmpAudioPath());
-				if(!isSus) {
-					LogUtil.log(mBean.getInFileName()+" generateAudio fail");
-					return ;
-				}
-				// repeatly do following process
-				
-				
 				// pick random x files for extend to length of video
 				//一张图片5秒  时长/5+1 = 需要的图片数量
 				int needNum = Float.valueOf(videoLength / Configure.oneImageSecond + 1).intValue();
@@ -63,6 +55,13 @@ public class TaskHelper {
 				for (int workIdx = 0; workIdx< workTime; workIdx++){
 					
 					LogUtil.log("Generating  " + workIdx  + " video  ");
+					
+					// generate video's audio file
+					Boolean isSus = ProcessHander.generateAudio(mBean.getInFilePath(), mBean.getTmpAudioPath());
+					if(!isSus) {
+						LogUtil.log(mBean.getInFileName()+" generateAudio fail");
+						return ;
+					}
 					
 					// 生成新一轮的图片
 					FileUtil.makeExportImage(needNum, mBean.getTmpDir());
@@ -81,11 +80,13 @@ public class TaskHelper {
 						return;
 					}
 					
-					FileUtil.deleteDir(mBean.getTmpDir());
 					// go sleep one second
 					
 					LogUtil.log(mBean.getInFileName() + "  finish");
+					FileUtil.pruneDir(mBean.getTmpDir());
 				}
+				
+				FileUtil.deleteDir(mBean.getTmpDir());
 
 			} catch (Exception e) {
 				// TODO: handle exception

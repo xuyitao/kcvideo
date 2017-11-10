@@ -7,6 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class FileUtil {
 
@@ -53,6 +54,25 @@ public class FileUtil {
 		return deleteDir(new File(dir));
 	}
 	
+	public static boolean pruneDir(String dir) {
+		File currentDir = new File(dir);
+		if (currentDir.isDirectory()) {
+            String[] children = currentDir.list();
+            //递归删除目录中的子目录下
+            for (int i=0; i<children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+            return true;
+            
+        }
+		else{
+			return false;
+		}
+	}
+	
     public static boolean deleteDir(File dir) {
         if (dir.isDirectory()) {
             String[] children = dir.list();
@@ -79,4 +99,25 @@ public class FileUtil {
         }
         return ext;
     }
+    
+	public boolean isCompletelyWritten(File file) {
+	    Long fileSizeBefore = file.length();
+	    try {
+			TimeUnit.SECONDS.sleep(2);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	    
+	    Long fileSizeAfter = file.length();
+
+	    System.out.println("comparing file size " + fileSizeBefore + " with " + fileSizeAfter);
+
+	    if (fileSizeBefore.equals(fileSizeAfter)) {
+	        return true;
+	    }
+	    return false;
+	}
+
 }
