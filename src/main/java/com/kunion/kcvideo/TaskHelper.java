@@ -4,11 +4,12 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class TaskHelper {
 
-	ExecutorService threadPool = Executors.newCachedThreadPool();
+	ExecutorService threadPool = Executors.newFixedThreadPool(8);
 	
 	
 	public void addTask(TaskBean bean) {
@@ -17,6 +18,10 @@ public class TaskHelper {
 		} else {
 			LogUtil.log(bean.getInFileName() + "is not exist");
 		}
+	}
+	
+	public void poolLog() {
+		LogUtil.log("总线程池  正在处理   " + ((ThreadPoolExecutor)threadPool).getActiveCount()+ "  等待处理   " + ((ThreadPoolExecutor)threadPool).getQueue().size());
 	}
 	
 	class TaskThread implements Runnable {
@@ -32,7 +37,7 @@ public class TaskHelper {
 				LogUtil.log("error bean is null");
 				return ;
 			}
-			LogUtil.log(mBean.getInFileName() + "   starting");
+			LogUtil.log(mBean.getInFileName() + "   开始转换");
 			try {
 				// hold
 				if(!FileUtil.isCompletelyFile(mBean.getInFilePath())) {
@@ -42,7 +47,7 @@ public class TaskHelper {
 				
 				// calculate video file's length
 				Integer videoLength = ProcessHander.getVideoLength(mBean.getInFilePath());
-				LogUtil.log(mBean.getInFileName()+" videoLength is  "+videoLength);
+				LogUtil.log(mBean.getInFileName()+" 视频长度   "+videoLength + " 1/4");
 				
 				// pick random x files for extend to length of video
 				//一张图片5秒  时长/5+1 = 需要的图片数量
@@ -65,6 +70,8 @@ public class TaskHelper {
 						return ;
 					}
 					
+					LogUtil.log(mBean.getInFileName()+" 生成音频成功 2/4 " +"   总"+ (workIdx+1) + "/" + workTime + "视频");
+					
 					// 生成新一轮的图片
 					FileUtil.makeExportImage(needNum, mBean.getTmpDir());
 					
@@ -75,16 +82,18 @@ public class TaskHelper {
 						return ;
 					}
 					
+					LogUtil.log(mBean.getInFileName()+" 生成无声视频成功 3/4 " +"   总"+ (workIdx+1) + "/" + workTime + "视频");
+					
 					// combine video and audio file output final video
 					isSus = ProcessHander.mergeVideoAImage(mBean.getTmpAudioPath(), mBean.getTmpVideoPath(), mBean.getWorkingOutFileName(workIdx+1));
 					if(!isSus) {
 						LogUtil.log(mBean.getInFileName()+" mergeVideoAImage fail");
 						return;
 					}
-					
+					LogUtil.log(mBean.getInFileName()+" 生成无声视频成功 4/4 " +"   总"+ (workIdx+1) + "/" + workTime + "视频");
 					// go sleep one second
 					
-					LogUtil.log(mBean.getInFileName() + "  finish");
+					LogUtil.log(mBean.getInFileName() + "  完成");
 					FileUtil.pruneDir(mBean.getTmpDir());
 				}
 				App.videoManager.finishVideo(mBean);

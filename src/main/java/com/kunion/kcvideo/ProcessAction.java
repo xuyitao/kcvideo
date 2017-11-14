@@ -1,6 +1,7 @@
 package com.kunion.kcvideo;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,14 +42,14 @@ public class ProcessAction {
 
 	public static Integer getVideoLength(String videoPath) throws IOException {
 		Runtime rt = Runtime.getRuntime();
-		String cmd = Configure.ffprobe + " -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 " + videoPath;
-		LogUtil.log(cmd);
+		String cmd = Configure.ffprobe + " -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 " + getRealPath(videoPath);
+//		LogUtil.log(cmd);
 		Process pr = rt.exec(cmd);
 		
 		String result = readerResult(pr.getInputStream());
-		
+		LogUtil.log("getVideoLength  " + result);
 	    Float time = Float.parseFloat(result);
-	    LogUtil.log(time.intValue()+"");
+//	    LogUtil.log(time.intValue()+"");
 	    pr.destroy();
 	    return time.intValue();
 	
@@ -56,8 +57,8 @@ public class ProcessAction {
 	
 	public static Boolean generateAudio(String videoPath, String audioPath) throws IOException {
 		Runtime rt = Runtime.getRuntime();
-		String cmd = Configure.ffmpeg + " -i " + videoPath+ " -vn -acodec copy -y " + audioPath;
-		LogUtil.log(cmd);
+		String cmd = Configure.ffmpeg + " -i " + getRealPath(videoPath)+ " -vn -acodec copy -y " + getRealPath(audioPath);
+//		LogUtil.log(cmd);
 		Process pr = rt.exec(cmd);
 		
 		String result = readerResult(pr.getErrorStream());
@@ -72,11 +73,11 @@ public class ProcessAction {
 		StringBuilder sBuilder = new StringBuilder();
 		sBuilder.append(Configure.ffmpeg);
 		sBuilder.append(" -f image2 -r 1/"+Configure.oneImageSecond+" -i ");
-		sBuilder.append(imgPath);
+		sBuilder.append(getRealPath(imgPath));
 		sBuilder.append(" -pix_fmt yuvj420p -y ");
-		sBuilder.append(videoPath);
+		sBuilder.append(getRealPath(videoPath));
 		String cmd = sBuilder.toString();
-		LogUtil.log(cmd);
+//		LogUtil.log(cmd);
 		Process pr = rt.exec(cmd);
 
 		String result = readerResult(pr.getErrorStream());
@@ -91,13 +92,13 @@ public class ProcessAction {
 		StringBuilder sBuilder = new StringBuilder();
 		sBuilder.append(Configure.ffmpeg);
 		sBuilder.append(" -i ");
-		sBuilder.append(videoPath);
+		sBuilder.append(getRealPath(videoPath));
 		sBuilder.append(" -i ");
-		sBuilder.append(audioPath);
+		sBuilder.append(getRealPath(audioPath));
 		sBuilder.append(" -c:v copy -c:a aac -strict experimental -y ");
-		sBuilder.append(outVideoPath);
+		sBuilder.append(getRealPath(outVideoPath));
 		String cmd = sBuilder.toString();
-		LogUtil.log(cmd);
+//		LogUtil.log(cmd);
 		Process pr = rt.exec(cmd);
 
 		String result = readerResult(pr.getErrorStream());
@@ -113,11 +114,14 @@ public class ProcessAction {
 		StringBuilder sbBuilder = new StringBuilder();
 		String line;
 		while (( line = input.readLine()) != null) {
-	    	LogUtil.log("readerResult"+line);
+//	    	LogUtil.log("readerResult"+line);
 	    	sbBuilder.append(line);
 	    }
 		input.close();
 		return sbBuilder.toString();
 	}
 	
+	public static String getRealPath(String file) {
+		return "\""+new File(file).getAbsolutePath()+"\"";
+	}
 }

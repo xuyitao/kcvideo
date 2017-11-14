@@ -19,7 +19,7 @@ public class App
     		
     		List<String> newVideos = videoManager.getUnHandlerVideo();
     		
-    		LogUtil.log(newVideos.toString());
+    		LogUtil.log("增加新视频  " + newVideos.size() + "  " + newVideos.toString());
     		
     		for(String videoFileName : newVideos) {
     			
@@ -29,6 +29,7 @@ public class App
     		}
 	    	
     		try {
+    			helper.poolLog();
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
