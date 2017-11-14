@@ -17,7 +17,7 @@ public class VideoManager {
 	
 	public VideoManager() {
 		mVideoDir = new File(Configure.videoFolderPath);
-		videoHandleringList = new ArrayList<>();
+		videoHandleringList = new ArrayList<String>();
 		
 	}
 	
@@ -28,7 +28,6 @@ public class VideoManager {
     	if(mVideoDir.isDirectory()) {
     		String [] newVideos = mVideoDir.list(new FilenameFilter() {
 				
-				@Override
 				public boolean accept(File dir, String name) {
 					// TODO Auto-generated method stub
 					String prefix=name.substring(0, DONE.length());
