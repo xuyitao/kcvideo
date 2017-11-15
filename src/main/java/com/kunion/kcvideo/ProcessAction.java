@@ -29,7 +29,8 @@ import java.util.concurrent.TimeoutException;
 
 // add subtitle to default
 // ffmpeg -i 5.mp4 -f srt -i 5.srt -c:v copy -c:a copy -c:s mov_text -disposition:s:0 default  outfile.mp4
-
+// hard burn subtitle 
+// ffmpeg -i 5.mp4 -filter:v subtitles=5.srt output.mp4
 
 //图片转视频 
 //ffmpeg -i %d.jpg -vf "zoompan=z='if(lte(zoom,1.0),1.5,max(1.001,zoom-0.008))':d=125:s=200x200,fade=t=in:d=1" -c:v libx264 -t 15 -s 200x200 -y zoomout.mp
