@@ -47,7 +47,7 @@ public class ProcessAction {
 	public static Integer getVideoLength(String videoPath) throws IOException {
 		Runtime rt = Runtime.getRuntime();
 		String cmd = Configure.ffprobe + " -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 " + getRealPath(videoPath);
-//		LogUtil.log(cmd);
+		LogUtil.log(cmd);
 		Process pr = rt.exec(cmd);
 		
 		String result = readerResult(pr.getInputStream());
@@ -126,6 +126,11 @@ public class ProcessAction {
 	}
 	
 	public static String getRealPath(String file) {
-		return "\""+new File(file).getAbsolutePath()+"\"";
+		if(Configure.isWin()) {
+			return "\""+new File(file).getAbsolutePath()+"\"";
+		}
+		
+		return new File(file).getAbsolutePath();
+			
 	}
 }

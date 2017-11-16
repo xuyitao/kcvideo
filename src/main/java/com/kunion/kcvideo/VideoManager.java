@@ -24,6 +24,8 @@ public class VideoManager {
 	
     public List<String> getUnHandlerVideo() {
     	
+  
+   	
     	List<String> newVideoList=new ArrayList<String>();
     	if(mVideoDir.isDirectory()) {
     		String [] newVideos = mVideoDir.list(new FilenameFilter() {
@@ -44,6 +46,10 @@ public class VideoManager {
     					isContains = true;
     				}
     			}
+    			// for mac os .DS_Store file case - actually needs more for image types
+				if (filename.startsWith(".")){
+					isContains = true;
+				}
     			if(!isContains) {
     				newVideoList.add(filename);
     			}
